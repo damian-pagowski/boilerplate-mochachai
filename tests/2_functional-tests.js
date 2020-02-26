@@ -6,30 +6,16 @@ var server = require('../server') /** import the Express app **/
 var chaiHttp = require('chai-http') /** require the chai-http plugin **/
 chai.use(chaiHttp) /** use the chai-http plugin **/
 
-suite('Functional Tests', function () {
-  // Mocha allows testing asyncronous operations.
-  // There is a small (BIG) difference. Can you spot it ?
+describe('Functional Tests', ()  =>  {
 
-  // ### EXAMPLE ###
-  test('Asynchronous test #example', function (done) {
-    /** <= Pass a callback to the test function **/
-    setTimeout(function () {
-      assert.isOk('Async test !!')
-      done() /** Call 'done()' when the async operation is completed**/
-    }, 500) // the function will be executed after 500ms
-  })
-
-  // NOTE: The tests having #example in their description string,
-  // are instructional examples and are not parsed by our test analyser
-
-  suite('Integration tests with chai-http', function () {
+  describe('Integration tests with chai-http', function () {
     // We can test our API endpoints using a plugin, called chai-http.
     // Let's see how it works. And remember, API calls are asynchronous...
 
     // ### EXAMPLE ###
-    suite('GET /hello?name=[name] => "hello [name]"', function () {
+    describe('GET /hello?name=[name] => "hello [name]"', function () {
       // We send a name string in the url query string.
-      test('#example - ?name=John', function (done) {
+      it('#example - ?name=John', function (done) {
         // Don't forget the callback...
         chai
           .request(server) // 'server' is the Express App
@@ -53,7 +39,7 @@ suite('Functional Tests', function () {
        * Replace assert.fail(). Make the test pass. **/
 
       // If no name is passed, the endpoint responds with 'hello Guest'.
-      test('Test GET /hello with no name', function (done) {
+      it('Test GET /hello with no name', function (done) {
         // Don't forget the callback...
         chai
           .request(server) // 'server' is the Express App
@@ -71,7 +57,7 @@ suite('Functional Tests', function () {
       })
 
       /**  Another one... **/
-      test('Test GET /hello with your name', function (done) {
+      it('Test GET /hello with your name', function (done) {
         // Don't forget the callback...
         chai
           .request(server) // 'server' is the Express App
@@ -101,8 +87,8 @@ suite('Functional Tests', function () {
     // see the server code for more details.
 
     // ### EXAMPLE ###
-    suite('PUT /travellers', function () {
-      test('#example - responds with appropriate JSON data when sending {surname: "Polo"}', function (
+    describe('PUT /travellers', function () {
+      it('#example - responds with appropriate JSON data when sending {surname: "Polo"}', function (
         done
       ) {
         chai
@@ -145,7 +131,7 @@ suite('Functional Tests', function () {
       // !!!! Follow the order of the assertions in the preceding example!!!!,
       // we rely on it in our tests.
 
-      test('send {surname: "Colombo"}', function (done) {
+      it('send {surname: "Colombo"}', function (done) {
         // we setup the request for you...
         // name: 'Cristoforo',
         // surname: 'Colombo',
@@ -180,7 +166,7 @@ suite('Functional Tests', function () {
 
       /** Repetition is the mother of learning. **/
       // Try it again. This time without help !!
-      test('send {surname: "da Verrazzano"}', function (done) {
+      it('send {surname: "da Verrazzano"}', function (done) {
         /** place the chai-http request code here... **/
 
         //  name: 'Giovanni',
@@ -237,7 +223,7 @@ suite('Functional Tests', function () {
   // Browser.localhost('localhost', (process.env.PORT || 3000));
   Browser.localhost('example.com', 3000);
 
-  suite('e2e Testing with Zombie.js', function () {
+  describe('e2e Testing with Zombie.js', function () {
     const browser = new Browser()
 
     // Mocha allows You to prepare the ground running some code
@@ -246,16 +232,16 @@ suite('Functional Tests', function () {
 
     // With a headless browser, before the actual testing, we need to
     // **visit** the page we are going to inspect...
-    // the suiteSetup 'hook' is executed only once at the suite startup.
+    // the describeSetup 'hook' is executed only once at the describe startup.
     // Other different hook types can be executed before each test, after
-    // each test, or at the end of a suite. See the Mocha docs for more infos.
+    // each test, or at the end of a describe. See the Mocha docs for more infos.
 
-    suiteSetup(function (done) {
+    describeSetup(function (done) {
       // Remember, web interactions are asynchronous !!
       return browser.visit('/', done) // Browser asynchronous operations take a callback
     })
 
-    suite('"Famous Italian Explorers" form', function () {
+    describe('"Famous Italian Explorers" form', function () {
       // In the HTML main view we provided a input form.
       // It sends data to the "PUT /travellers" endpoint that we used above
       // with an Ajax request. When the request completes successfully the
@@ -271,7 +257,7 @@ suite('Functional Tests', function () {
       // Did it ? Ok. Let's see how to automate the process...
 
       // ### EXAMPLE ###
-      test('#example - submit the input "surname" : "Polo"', function (done) {
+      it('#example - submit the input "surname" : "Polo"', function (done) {
         browser.fill('input[name=surname]', 'Polo').pressButton('submit', function () {
           // pressButton is ## Async ##.
           // It waits for the ajax call to complete...
@@ -291,7 +277,7 @@ suite('Functional Tests', function () {
 
       /** Now it's your turn. Please don't use the keyword #example in the title. **/
 
-      test('submit "surname" : "Colombo" - write your e2e test...', function (
+      it('submit "surname" : "Colombo" - write your e2e test...', function (
         done
       ) {
         browser.fill('surname', 'Colombo').pressButton('submit', function () {
@@ -304,7 +290,7 @@ suite('Functional Tests', function () {
       })
 
       /** Try it again... No help this time **/
-      test('submit "surname" : "Vespucci" - write your e2e test...', function (
+      it('submit "surname" : "Vespucci" - write your e2e test...', function (
         done
       ) {
         browser.fill('surname', 'Vespucci').pressButton('submit', function () {
