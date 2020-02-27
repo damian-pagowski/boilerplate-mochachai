@@ -5,63 +5,60 @@ describe('Unit Tests', function(){
   describe('Basic Assertions', function() {
   
     it('#isNull, #isNotNull', function(){
-      assert.fail(null, 'null is null');
-      assert.fail( 1, '1 is not null');
+      assert.isNull(null, 'null is null');
+      assert.isNotNull( 1, '1 is not null');
     });
   
-    /** 2 - Use assert.isDefined() or assert.isUndefined() to make the tests pass. **/
     it('#isDefined, #isUndefined', function(){
-      assert.fail( null, 'null is not undefined');
-      assert.fail( undefined, 'undefined IS undefined');
-      assert.fail( 'hello', 'a string is not undefined' );
+      let something;
+      assert.isDefined( null, 'null is not undefined');
+      assert.isUndefined( undefined, 'undefined IS undefined');
+      assert.isUndefined(something, 'uninitialized variaable')
+      assert.isDefined( 'hello', 'a string is not undefined' );
     });
   
-    /** 3 - Use assert.isOk() or assert.isNotOk() to make the tests pass. **/
-    // .isOk(truthy) and .isNotOk(falsey) will pass
     it('#isOk, #isNotOk', function(){
-      assert.fail( null, 'null is falsey');
-      assert.fail( "I'm truthy", 'a string is truthy');
-      assert.fail( true, 'true is truthy' );
+      assert.isNotOk( null, 'null is falsey');
+      assert.isOk( "I'm truthy", 'a string is truthy');
+      assert.isOk( true, 'true is truthy' );
     });
   
-    /** 4 - Use assert.isTrue() or assert.isNotTrue() to make the tests pass. **/
-    // .isTrue(true) and .isNotTrue(everything else) will pass.
-    // .isFalse() and .isNotFalse() also exist.
     it('#isTrue, #isNotTrue', function(){
-      assert.fail( true, 'true is true');
-      assert.fail( !!'double negation', 'double negation of a truthy is true');
-      assert.fail({ value: 'truthy' }, 'A truthy object is NOT TRUE (neither is false...)' );
+      assert.isTrue( true, 'true is true');
+      assert.isTrue(!!'double negation', 'double negation of a truthy is true');
+      assert.isNotTrue({ value: 'truthy' }, 'A truthy object is NOT TRUE (neither is false...)' );
     });
   
-    // There are more assertions like these: .isNaN(), .isBoolean(), 
-    // and many others. Almost all the assertions in the chai library
-    // have their negative counterpart - e.g. .isNotBoolean(), ...
+    it('isBoolean', ()=> {
+      assert.isBoolean(true, 'true is bool')
+      assert.isNotBoolean('dupa', 'dupa is not bool')
+
+    })
   });
   
   // -----------------------------------------------------------------------------
   
   describe('Equality', function() {
-    /** 5 - .equal(), .notEqual() **/
     // .equal() compares objects using '=='
     it('#equal, #notEqual', function(){
-      assert.fail( 12, '12', 'numbers are coerced into strings with == ');
-      assert.fail( {value: 1}, {value:1}, '== compares object references');
-      assert.fail( 6 * '2', '12', 'no more hints...');
-      assert.fail( 6 + '2', '12', 'type your error message if you want' );
+      assert.equal( 12, '12', 'numbers are coerced into strings with == ');
+      assert.notEqual( {value: 1}, {value:1}, '== compares object references');
+       assert.equal( 6 * '2', '12', 'no more hints...');
+      assert.notEqual( 6 + '2', '12', 'type your error message if you want' );
     });
     /** 6 - .strictEqual(), .notStrictEqual() **/
     // .strictEqual() compares objects using '==='
     it('#strictEqual, #notStrictEqual', function(){
-      assert.fail( 6, '6' );
-      assert.fail( 6, 3*2 );
-      assert.fail( 6 * '2', 12 );
-      assert.fail( [1, 'a', {} ], [1, 'a', {}] );
+      assert.notStrictEqual( 6, '6' );
+      assert.strictEqual( 6, 3*2 );
+      assert.strictEqual( 6 * '2', 12 );
+      assert.notStrictEqual( [1, 'a', {} ], [1, 'a', {}] );
     });
     /** 7 - .deepEqual(), .notDeepEqual() **/
     // .deepEqual() asserts that two object are deep equal
     it('#deepEqual, #notDeepEqual', function(){
-      assert.fail( { a: '1', b: 5 } , { b: 5, a: '1' }, "keys order doesn't matter" );
-      assert.fail( { a: [5, 6] }, { a: [6, 5] }, "array elements position does matter !!" );
+      assert.deepEqual( { a: '1', b: 5 } , { b: 5, a: '1' }, "keys order doesn't matter" );
+      assert.notDeepEqual( { a: [5, 6] }, { a: [6, 5] }, "array elements position does matter !!" );
     });
   });
 
@@ -77,18 +74,18 @@ describe('Unit Tests', function(){
     
     /** 8 - .isAbove() => a > b , .isAtMost() => a <= b **/
     it('#isAbove, #isAtMost', function() {
-      assert.fail('hello'.length , 5);
-      assert.fail(1, 0);
-      assert.fail(Math.PI, 3);
-      assert.fail(1 - Math.random(), 1);
+      assert.isAtMost('hello'.length , 5);
+      assert.isAbove(1, 0);
+      assert.isAbove(Math.PI, 3);
+      assert.isAtMost(1 - Math.random(), 1);
     });
 
     /** 9 - .isBelow() => a < b , .isAtLeast =>  a >= b **/
     it('#isBelow, #isAtLeast', function() {
-      assert.fail('world'.length , 5);
-      assert.fail(2*Math.random(), 0);
-      assert.fail(5 % 2, 2);
-      assert.fail(2/3, 1);
+      assert.isAtLeast('world'.length , 5);
+      assert.isAtLeast(2*Math.random(), 0);
+      assert.isBelow(5 % 2, 2);
+      assert.isBelow(2/3, 1);
     });
 
     /** 10 - .approximately **/
@@ -97,89 +94,90 @@ describe('Unit Tests', function(){
     // Choose the minimum range (3rd parameter) to make the test always pass
     // it should be less than 1
     it('#approximately', function() {
-      assert.approximately(weirdNumbers(0.5) , 1, /*edit this*/ 0 );
-      assert.approximately(weirdNumbers(0.2) , 1, /*edit this*/ 0 );
+      assert.approximately(weirdNumbers(0.5) , 1, /*edit this*/ 0.5 );
+      assert.approximately(weirdNumbers(0.2) , 1, /*edit this*/ 0.8 );
     });
   });
 
 // -----------------------------------------------------------------------------
 
   // These variables are used in the tests. Don't Edit them.
-  var winterMonths = ['dec,','jan', 'feb', 'mar'];
-  var backendLanguages = ['php', 'python', 'javascript', 'ruby', 'asp'];
+  const winterMonths = ['dec,','jan', 'feb', 'mar'];
+  const backendLanguages = ['php', 'python', 'javascript', 'ruby', 'asp'];
   describe('Arrays', function(){
     
     /** 11 - #isArray vs #isNotArray **/
     it('#isArray, #isNotArray', function() {
-      assert.fail('isThisAnArray?'.split(''), 'String.prototype.split() returns an Array');
-      assert.fail([1,2,3].indexOf(2), 'indexOf returns a number.');
+      assert.isArray('isThisAnArray?'.split(''), 'String.prototype.split() returns an Array');
+      assert.isNotArray([1,2,3].indexOf(2), 'indexOf returns a number.');
     });
     
     /** 12 - #include vs #notInclude **/
     it('Array #include, #notInclude', function() {
-      assert.fail(winterMonths, 'jul', "It's summer in july...");
-      assert.fail(backendLanguages, 'javascript', 'JS is a backend language !!');
+      assert.notInclude(winterMonths, 'jul', "It's summer in july...");
+      assert.include(backendLanguages, 'javascript', 'JS is a backend language !!');
     });
   });
 
 // -----------------------------------------------------------------------------
 
   // These variables are used in the tests. Don't Edit them.
-  var formatPeople = function(name, age) {
+  const formatPeople = function(name, age) {
     return '# name: ' + name + ', age: ' + age + '\n';
   };
   describe('Strings', function(){
     
     /** 13 - #isString asserts that the actual value is a string. **/
     it('#isString, #isNotString', function() {
-      assert.fail(Math.sin(Math.PI/4), 'a float is not a string');
-      assert.fail(process.env.PATH, 'env vars are strings (or undefined)');
-      assert.fail(JSON.stringify({type: 'object'}), 'a JSON is a string');
+      assert.isNotString(Math.sin(Math.PI/4), 'a float is not a string');
+      assert.isString(process.env.PATH, 'env vars are strings (or undefined)');
+      assert.isString(JSON.stringify({type: 'object'}), 'a JSON is a string');
     });
     
     /** 14 - #include (on #notInclude ) works for strings too !! **/
     // It asserts that the actual string contains the expected substring
     it('String #include, #notInclude', function() {
-      assert.fail('Arrow', 'row', "Arrow contains row...");
-      assert.fail('dart', 'queue', "But a dart doesn't contain a queue");
+      assert.include('Arrow', 'row', "Arrow contains row...");
+      assert.notInclude('dart', 'queue', "But a dart doesn't contain a queue");
     });
     
     /** 15 - #match Asserts that the actual value **/
     // matches the second argument regular expression.
     it('#match, #notMatch', function() {
-      var regex =  /^#\sname\:\s[\w\s]+,\sage\:\s\d+\s?$/;
-      assert.fail(formatPeople('John Doe', 35), regex);
-      assert.fail(formatPeople('Paul Smith III', 'twenty-four'), regex);
+      const regex =  /^#\sname\:\s[\w\s]+,\sage\:\s\d+\s?$/;
+ 
+      assert.match(formatPeople('John Doe', 35), regex);
+      assert.notMatch(formatPeople('Paul Smith III', 'twenty-four'), regex);
     });
   });
   
  // ----------------------------------------------------------------------------- 
 
   // These variables are used in the tests. Don't Edit them.
-  var Car = function() {
+  const Car = function() {
     this.model = 'cedan';
     this.engines = 1;
     this.wheels = 4;
   };
 
-  var Plane = function() {
+  const Plane = function() {
     this.model = '737';
     this.engines = ['left', 'right'];
     this.wheels = 6;
     this.wings = 2;
   };
   
-  var myCar = new Car();
-  var airlinePlane = new Plane();
+  const myCar = new Car();
+  const airlinePlane = new Plane();
 
   describe('Objects', function(){
     
     /** 16 - #property asserts that the actual object has a given property. **/
     // Use #property or #notProperty where appropriate
     it('#property, #notProperty', function() {
-      assert.fail(myCar, 'wings', 'A car has not wings');
-      assert.fail(airlinePlane, 'engines', 'planes have engines');
-      assert.fail(myCar, 'wheels', 'Cars have wheels');
+      assert.notProperty(myCar, 'wings', 'A car has not wings');
+      assert.property(airlinePlane, 'engines', 'planes have engines');
+      assert.property(myCar, 'wheels', 'Cars have wheels');
     });
 
     it('#typeOf, #notTypeOf', function() {
@@ -187,21 +185,21 @@ describe('Unit Tests', function(){
       /** 17 #typeOf asserts that value’s type is the given string, **/
       // as determined by Object.prototype.toString.
       // Use #typeOf or #notTypeOf where appropriate
-      assert.fail(myCar, 'object');
-      assert.fail(myCar.model, 'string');
-      assert.fail(airlinePlane.wings, 'string');
-      assert.fail(airlinePlane.engines, 'array');
-      assert.fail(myCar.wheels, 'number');
+      assert.typeOf(myCar, 'object');
+      assert.typeOf(myCar.model, 'string');
+      assert.notTypeOf(airlinePlane.wings, 'string');
+      assert.typeOf(airlinePlane.engines, 'array');
+      assert.typeOf(myCar.wheels, 'number');
     });
 
     it('#instanceOf, #notInstanceOf', function() {
       
       /** 18 #instanceOf asserts that an object is an instance of a constructor **/
       // Use #instanceOf or #notInstanceOf where appropriate
-      assert.fail(myCar, Plane);
-      assert.fail(airlinePlane, Plane);
-      assert.fail(airlinePlane, Object, 'everything is an Object');
-      assert.fail(myCar.wheels, String );
+      assert.notInstanceOf(myCar, Plane);
+      assert.instanceOf(airlinePlane, Plane);
+      assert.instanceOf(airlinePlane, Object, 'everything is an Object');
+      assert.notInstanceOf(myCar.wheels, String );
     });
   });
   
